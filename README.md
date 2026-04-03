@@ -19,7 +19,8 @@
 4. **专属代理分流规则：** 自定义分流规则，实现个性化的分流模式；
 5. **节点包含和排除功能：** 可以根据关键词过滤节点，只包含或排除特定节点；
 6. **本地部署支持：** 不再依赖 Cloudflare Workers，可在本地服务器部署运行；
-7. **更多功能等待发掘...
+7. **现代化前端界面：** 集成了美观的订阅转换 Web 界面，支持多种订阅格式转换；
+8. **更多功能等待发掘...
 
 ## 🎬 视频教程
 - **[自建订阅！CF-Workers-SUB 教你如何将多节点多订阅汇聚合并为一个订阅！](https://youtu.be/w6rRY4FDd58)**
@@ -114,7 +115,12 @@
    npm install
    ```
 
-### 3. 配置环境变量：
+### 3. 构建前端界面（可选，如果已有 dist 目录可跳过）：
+   ```bash
+   npm run build
+   ```
+
+### 4. 配置环境变量：
    创建 `.env` 文件，添加以下内容：
    ```
    # 订阅配置
@@ -130,17 +136,25 @@
    # SUBCONFIG=https://raw.githubusercontent.com/cmliu/ACL4SSR/main/Clash/config/ACL4SSR_Online_MultiCountry.ini
    ```
 
-### 4. 启动服务器：
+### 5. 启动服务器：
    ```bash
-   # 开发模式
-   npm run dev
-   # 生产模式
+   # 生产模式（推荐）
    npm start
    ```
 
-### 5. 访问订阅：
-   - 订阅地址：`http://localhost:3000/auto`
-   - 管理页面：`http://localhost:3000/auto`
+### 6. 访问应用：
+   - **前端订阅转换界面**：`http://localhost:3000/`
+   - **汇聚订阅地址**：`http://localhost:3000/auto`
+   - **订阅管理页面**：`http://localhost:3000/auto`
+
+### 开发模式：
+   如果需要在开发模式下运行，可以同时运行后端和前端：
+   ```bash
+   # 终端1：运行后端服务器
+   npm start
+   # 终端2：运行前端开发服务器
+   npm run serve
+   ```
 
 </details>
 

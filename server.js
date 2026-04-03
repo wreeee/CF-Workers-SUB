@@ -3,6 +3,7 @@ const fetch = require('node-fetch');
 const crypto = require('crypto');
 const atob = require('atob');
 const btoa = require('btoa');
+const path = require('path');
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -37,12 +38,55 @@ app.use(express.text());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// 主路由
-app.get('*', async (req, res) => {
+// 静态文件服务 - 提供构建后的前端界面
+app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, 'public')));
+
+// 前端界面路由
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+app.get('/web', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+});
+
+// 订阅相关路由
+app.get('/' + mytoken, async (req, res) => {
     await handleRequest(req, res);
 });
 
-app.post('*', async (req, res) => {
+app.post('/' + mytoken, async (req, res) => {
+    await handleRequest(req, res);
+});
+
+app.get('/sub', async (req, res) => {
+    await handleRequest(req, res);
+});
+
+app.post('/sub', async (req, res) => {
+    await handleRequest(req, res);
+});
+
+// 其他订阅相关的路由
+app.get('/*', async (req, res) => {
+    const url = new URL(req.url, `http://${req.headers.host}`);
+    const token = url.searchParams.get('token');
+    const pathname = url.pathname;
+    
+    // 检查是否是订阅相关请求
+    if ([mytoken, 'auto'].includes(token) || 
+        pathname.includes(mytoken) || 
+        pathname.includes('/sub') ||
+        token) {
+        await handleRequest(req, res);
+    } else {
+        // 不是订阅相关请求，返回前端界面
+        res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    }
+});
+
+app.post('/*', async (req, res) => {
     await handleRequest(req, res);
 });
 

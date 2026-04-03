@@ -5,16 +5,32 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
   },
   "dependencies": {
     "express": "^4.18.2",
     "node-fetch": "^3.3.2",
     "atob": "^2.1.2",
-    "btoa": "^1.2.1"
+    "btoa": "^1.2.1",
+    "axios": "^1.7.2",
+    "core-js": "^3.37.1",
+    "element-ui": "^2.15.14",
+    "vue": "^2.7.16",
+    "vue-clipboard2": "^0.3.3",
+    "vue-router": "^3.6.5"
   },
   "devDependencies": {
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "babel-plugin-component": "^1.1.1",
+    "babel-plugin-import": "^1.13.8",
+    "sass": "^1.66.1",
+    "sass-loader": "^13.3.2",
+    "vue-template-compiler": "^2.6.14"
   },
   "author": "",
   "license": "MIT"
