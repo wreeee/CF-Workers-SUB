@@ -93,6 +93,9 @@ export default {
 			await sendMessage(`#获取订阅 ${FileName}`, request.headers.get('CF-Connecting-IP'), `UA: ${userAgentHeader}</tg-spoiler>\n域名: ${url.hostname}\n<tg-spoiler>入口: ${url.pathname + url.search}</tg-spoiler>`);
 			const isSubConverterRequest = request.headers.get('subconverter-request') || request.headers.get('subconverter-version') || userAgent.includes('subconverter');
 			let 订阅格式 = 'base64';
+			// 获取包含和排除节点的参数
+			const includeNodes = url.searchParams.get('include') ? url.searchParams.get('include').split(',') : [];
+			const excludeNodes = url.searchParams.get('exclude') ? url.searchParams.get('exclude').split(',') : [];
 			if (!(userAgent.includes('null') || isSubConverterRequest || userAgent.includes('nekobox') || userAgent.includes(('CF-Workers-SUB').toLowerCase()))) {
 				if (userAgent.includes('sing-box') || userAgent.includes('singbox') || url.searchParams.has('sb') || url.searchParams.has('singbox')) {
 					订阅格式 = 'singbox';
@@ -150,7 +153,28 @@ export default {
 
 			//去重
 			const uniqueLines = new Set(text.split('\n'));
-			const result = [...uniqueLines].join('\n');
+			let result = [...uniqueLines].join('\n');
+			
+			// 节点过滤
+			if (includeNodes.length > 0 || excludeNodes.length > 0) {
+				const lines = result.split('\n');
+				const filteredLines = lines.filter(line => {
+					if (!line) return false;
+					
+					// 检查是否在排除列表中
+					const isExcluded = excludeNodes.some(keyword => line.toLowerCase().includes(keyword.toLowerCase()));
+					if (isExcluded) return false;
+					
+					// 检查是否在包含列表中（如果包含列表不为空）
+					if (includeNodes.length > 0) {
+						return includeNodes.some(keyword => line.toLowerCase().includes(keyword.toLowerCase()));
+					}
+					
+					// 如果没有包含列表，则默认包含所有节点
+					return true;
+				});
+				result = filteredLines.join('\n');
+			}
 			//console.log(result);
 
 			let base64Data;

@@ -17,7 +17,9 @@
 2. **将多个base64订阅汇聚成一个订阅链接：** 可以将多个订阅（例如不同的机场）合并成一个订阅，只需使用一个订阅地址即可获取所有节点；
 3. **自动适配不同梯子的格式订阅链接：** 依托[订阅转换](https://sub.cmliussss.com/)服务，自动将订阅转换为不同梯子所需的格式，实现一条订阅适配多种梯子；
 4. **专属代理分流规则：** 自定义分流规则，实现个性化的分流模式；
-5. **更多功能等待发掘...**
+5. **节点包含和排除功能：** 可以根据关键词过滤节点，只包含或排除特定节点；
+6. **本地部署支持：** 不再依赖 Cloudflare Workers，可在本地服务器部署运行；
+7. **更多功能等待发掘...
 
 ## 🎬 视频教程
 - **[自建订阅！CF-Workers-SUB 教你如何将多节点多订阅汇聚合并为一个订阅！](https://youtu.be/w6rRY4FDd58)**
@@ -96,6 +98,52 @@
 
 </details>
 
+## 🖥️ 本地部署方法
+
+<details>
+<summary><code><strong>「 本地部署文字教程 」</strong></code></summary>
+
+### 1. 克隆项目：
+   ```bash
+   git clone https://github.com/cmliu/CF-Workers-SUB.git
+   cd CF-Workers-SUB
+   ```
+
+### 2. 安装依赖：
+   ```bash
+   npm install
+   ```
+
+### 3. 配置环境变量：
+   创建 `.env` 文件，添加以下内容：
+   ```
+   # 订阅配置
+   TOKEN=auto
+   # 节点和订阅链接
+   LINK=https://cfxr.eu.org/getSub
+   # 其他可选配置
+   # GUEST=test
+   # TGTOKEN=6894123456:XXXXXXXXXX0qExVsBPUhHDAbXXXXXqWXgBA
+   # TGID=6946912345
+   # SUBNAME=CF-Workers-SUB
+   # SUBAPI=SUBAPI.cmliussss.net
+   # SUBCONFIG=https://raw.githubusercontent.com/cmliu/ACL4SSR/main/Clash/config/ACL4SSR_Online_MultiCountry.ini
+   ```
+
+### 4. 启动服务器：
+   ```bash
+   # 开发模式
+   npm run dev
+   # 生产模式
+   npm start
+   ```
+
+### 5. 访问订阅：
+   - 订阅地址：`http://localhost:3000/auto`
+   - 管理页面：`http://localhost:3000/auto`
+
+</details>
+
 ## 📋 变量说明
 | 变量名 | 示例 | 必填 | 备注 | 
 |-|-|-|-|
@@ -111,6 +159,34 @@
 
 ## ⚠️ 注意事项
 项目中，TGTOKEN和TGID在使用时需要先到Telegram注册并获取。其中，TGTOKEN是telegram bot的凭证，TGID是用来接收通知的telegram用户或者组的id。
+
+## 🔍 节点包含和排除功能使用说明
+
+### 使用方法
+在订阅链接中添加 `include` 和 `exclude` 参数，用于过滤节点：
+
+#### 只包含特定节点
+```url
+http://localhost:3000/auto?include=香港,台湾,日本
+```
+
+#### 排除特定节点
+```url
+http://localhost:3000/auto?exclude=美国,英国
+```
+
+#### 同时使用包含和排除
+```url
+http://localhost:3000/auto?include=香港,台湾&exclude=电信
+```
+
+### 说明
+- 多个关键词之间用逗号分隔
+- 匹配时不区分大小写
+- 如果同时使用 `include` 和 `exclude`，先应用 `exclude` 过滤，再应用 `include` 过滤
+- 如果只使用 `include`，则只保留包含指定关键词的节点
+- 如果只使用 `exclude`，则排除包含指定关键词的节点
+- 如果都不使用，则返回所有节点
 
 
 ## ⭐ Star 星星走起
